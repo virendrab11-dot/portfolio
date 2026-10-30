@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0c0f">
+  <title>Ca-Toon TV — Creative Universe</title>
+  <meta name="description" content="Ca-Toon TV by Virendra Bhakuni: original AI music, cinematic travel videos and animated stories for kids.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Inter:wght@400;500;600;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Motion is on unless the visitor asked for reduced motion; app.js turns it off again if GSAP fails to load
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js-anim");
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Intro loader (first visit per session only) -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-logo"><span class="ll">CA-TOON</span> <span class="ll gold">TV</span></div>
+  <div class="loader-bar"><i id="loader-fill"></i></div>
+  <div class="loader-count"><span id="loader-num">0</span>%</div>
+</div>
+
+<!-- Custom cursor (mouse devices only) -->
+<div class="cursor is-hidden" aria-hidden="true"><div class="cursor-ring"><span>Play</span></div><div class="cursor-dot"></div></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="shell topbar">
+  <a class="logo" href="#home">CA-TOON <span>TV</span><small>THE CREATIVE UNIVERSE</small></a>
+  <nav class="nav" id="nav" aria-label="Main">
+    <a href="#work">Selected work</a>
+    <a href="#music">Music &amp; Travel</a>
+    <a href="#kids">Kids cartoons</a>
+    <a href="#about">The creator</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="menu" id="menu" aria-expanded="false" aria-controls="nav">
+    Menu <span class="menu-icon" aria-hidden="true"><i></i><i></i></span>
+  </button>
+</header>
+
+<main id="main">
+<div id="home"></div>
+
+<!-- Hero -->
+<section class="shell hero">
+  <div class="hero-text">
+    <div class="kicker hero-in">An independent AI creator portfolio</div>
+    <h1 id="hero-title" aria-label="Make believe. Feel real.">Make believe.<br><span class="accent">Feel real.</span></h1>
+    <p class="hero-copy hero-in">A creative playground for original AI music, cinematic video and animated stories for kids. Building sounds, scenes and characters, one idea at a time.</p>
+    <div class="hero-actions hero-in">
+      <a class="button" href="#work" data-magnetic>Explore selected work <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="underlink" href="#about">The story behind it</a>
+    </div>
+    <div class="hero-meta hero-in"><span><b>01</b> Music</span><span><b>02</b> Motion</span><span><b>03</b> Imagination</span></div>
+  </div>
+  <div class="hero-stage">
+    <button class="hero-visual" id="hero-visual" data-tilt>
+      <span class="hero-img-wrap"><img id="hero-img" alt="" width="1280" height="720" fetchpriority="high"></span>
+      <span class="hero-caption">
+        <span><small>Creativity without a fixed genre</small><strong>Stories in every frame.</strong></span>
+        <small class="hero-tag">CA-TOON TV / <span class="year"></span></small>
+      </span>
+    </button>
+    <button class="hero-float f1" id="float-1" aria-label="Play video"><img alt="" width="480" height="360"></button>
+    <button class="hero-float f2" id="float-2" aria-label="Play video"><img alt="" width="480" height="360"></button>
+  </div>
+</section>
+
+<!-- Ticker + thumbnail marquee -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-set">Music <svg class="ico"><use href="#i-star"/></svg> Cinematic video <svg class="ico"><use href="#i-star"/></svg> Kids entertainment <svg class="ico"><use href="#i-star"/></svg> AI-powered storytelling <svg class="ico"><use href="#i-star"/></svg> Music <svg class="ico"><use href="#i-star"/></svg> Motion <svg class="ico"><use href="#i-star"/></svg></span>
+  </div>
+</div>
+<div class="reel" aria-label="Latest uploads"><div class="reel-track" id="reel"></div></div>
+
+<!-- 01 Selected work -->
+<section class="section" id="work"><div class="shell">
+  <div class="section-top">
+    <div><div class="section-label">01 / The portfolio</div><h2 data-split>Selected work.</h2></div>
+    <p class="section-desc">A few worlds from the studio, from original music and visual storytelling to playful animated adventures. Click any one to watch.</p>
+  </div>
+  <div class="feature-grid">
+    <button class="feature" data-feature data-channel="music" data-match="teri aahat" data-prefer="video" data-tilt>
+      <span class="feature-img"><img alt="" width="1280" height="720" loading="lazy"></span>
+      <span class="info"><span class="type">01 — Original music / cinematic video</span><span class="h3">Teri Aahat</span><span class="p">An indie-pop love story shaped by melody, atmosphere and mountain cinema.</span><span class="arrow"><svg class="ico"><use href="#i-play"/></svg></span></span>
+    </button>
+    <button class="feature" data-feature data-channel="kids" data-match="pyaari billi" data-prefer="short" data-tilt>
+      <span class="feature-img"><img alt="" width="1280" height="720" loading="lazy"></span>
+      <span class="info"><span class="type">02 — Kids animation</span><span class="h3">Pyaari Billi</span><span class="p">A playful character-led world of music and mini adventures.</span><span class="arrow"><svg class="ico"><use href="#i-play"/></svg></span></span>
+    </button>
+    <button class="feature" data-feature data-channel="kids" data-match="kaa?lu madari" data-prefer="video" data-tilt>
+      <span class="feature-img"><img alt="" width="1280" height="720" loading="lazy"></span>
+      <span class="info"><span class="type">03 — Animated musical tale</span><span class="h3">Kalu Madari</span><span class="p">A lively story brought to life with colourful scenes and rhythm.</span><span class="arrow"><svg class="ico"><use href="#i-play"/></svg></span></span>
+    </button>
+  </div>
+</div></section>
+
+<!-- 02 Music & Travel archive -->
+<section class="section music" id="music" aria-labelledby="music-title"><div class="shell">
+  <div class="section-top">
+    <div><div class="section-label">02 / Music &amp; Travel</div><h2 id="music-title" data-split>Cinema for the ears.</h2></div>
+    <p class="section-desc">Original songs, love stories and road-trip journeys, scored and filmed with AI. <span class="channel-name" data-channel-title="music"></span></p>
+  </div>
+  <div class="archive-head">
+    <a class="button button--ghost" data-subscribe="music" href="https://www.youtube.com/@virendrabhakuni9150?sub_confirmation=1" target="_blank" rel="noopener" data-magnetic>Subscribe on YouTube <svg class="ico"><use href="#i-arrow"/></svg></a>
+    <div class="filters" role="group" aria-label="Filter Music &amp; Travel videos">
+      <button class="filter active" data-filter="all" aria-pressed="true">All work</button>
+      <button class="filter" data-filter="video" aria-pressed="false">Videos</button>
+      <button class="filter" data-filter="short" aria-pressed="false">Shorts</button>
+    </div>
+  </div>
+  <div class="archive" data-archive="music"></div>
+</div></section>
+
+<!-- 03 Kids Cartoons archive -->
+<section class="section kids" id="kids" aria-labelledby="kids-title">
+  <div class="kids-blobs" aria-hidden="true"><i data-speed="-30"></i><i data-speed="40"></i><i data-speed="-55"></i><i data-speed="25"></i><i data-speed="-15"></i></div>
+  <div class="shell">
+    <div class="section-top">
+      <div><div class="section-label">03 / Kids cartoons</div><h2 id="kids-title" data-split>Silly, sweet &amp; singable.</h2></div>
+      <p class="section-desc">Hindi rhymes, cute animal friends and festival songs for little ones, animated in bright 3D. <span class="channel-name" data-channel-title="kids"></span></p>
+    </div>
+    <div class="archive-head">
+      <a class="button button--kids" data-subscribe="kids" href="https://www.youtube.com/@Ca-ToonTV?sub_confirmation=1" target="_blank" rel="noopener" data-magnetic>Subscribe on YouTube <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <div class="filters" role="group" aria-label="Filter Kids Cartoons videos">
+        <button class="filter active" data-filter="all" aria-pressed="true">All work</button>
+        <button class="filter" data-filter="video" aria-pressed="false">Videos</button>
+        <button class="filter" data-filter="short" aria-pressed="false">Shorts</button>
+      </div>
+    </div>
+    <div class="archive" data-archive="kids"></div>
+  </div>
+</section>
+
+<!-- 04 Creative worlds -->
+<section class="section" id="studio"><div class="shell">
+  <div class="section-top">
+    <div><div class="section-label">04 / Creative worlds</div><h2 data-split>Three ways to imagine.</h2></div>
+    <p class="section-desc">A single creator identity with clear creative lanes, each with its own tone, audience and visual language.</p>
+  </div>
+  <div class="studio">
+    <div class="studio-card" data-tilt><div class="number">01</div><h3>AI Music &amp; Sound</h3><p>Original songs, lyrics, music concepts, AI-assisted production, cover artwork and music-video direction.</p><a href="#music">Explore music <svg class="ico"><use href="#i-arrow"/></svg></a></div>
+    <div class="studio-card" data-tilt><div class="number">02</div><h3>Cinematic AI Video</h3><p>Short films, travel stories, mood pieces, scene design and AI-assisted video production.</p><a href="#music">Explore video <svg class="ico"><use href="#i-arrow"/></svg></a></div>
+    <div class="studio-card" data-tilt><div class="number">03</div><h3>Kids Entertainment</h3><p>Nursery rhymes, animated characters, joyful songs and imaginative stories for young audiences.</p><a href="#kids">Explore kids work <svg class="ico"><use href="#i-arrow"/></svg></a></div>
+  </div>
+</div></section>
+
+<!-- 05 The creator -->
+<section class="section" id="about"><div class="shell about-grid">
+  <div class="about-art"><img id="about-img" alt="" width="1280" height="720" loading="lazy"><div class="stamp">Ideas into experiences</div></div>
+  <div class="about-copy">
+    <div class="section-label">05 / The creator — Virendra Bhakuni</div>
+    <h2 data-split>Curiosity is the creative direction.</h2>
+    <p>I'm an independent digital creator exploring how AI can help turn ideas into music, moving images and memorable characters. My work moves between cinematic moods and playful kids' entertainment, from building a song's visual identity to creating a little animated world.</p>
+    <p>Ca-Toon TV is the home for that creative journey: a place for experiments, original projects and stories made to be watched, heard and remembered.</p>
+    <div class="chips"><span>AI-assisted creation</span><span>Music &amp; sound</span><span>Video storytelling</span><span>Kids animation</span></div>
+  </div>
+</div></section>
+
+<!-- 06 Stats -->
+<section class="section stats-section" id="stats" aria-labelledby="stats-title"><div class="shell">
+  <div class="section-top">
+    <div><div class="section-label">06 / By the numbers</div><h2 id="stats-title" data-split>Recent uploads, counted.</h2></div>
+    <p class="section-desc">Counts cover each channel's latest uploads, up to 15 per channel, from YouTube's public feed. Lifetime totals may be higher.</p>
+  </div>
+  <dl class="stats" id="stats-grid"></dl>
+</div></section>
+
+<!-- 07 Contact -->
+<section class="contact" id="contact"><div class="shell">
+  <div class="section-label">07 / Let's collaborate</div>
+  <h2 data-split>Have a story<br>to bring to life?</h2>
+  <div class="contact-row">
+    <p>For creative collaborations, original music, AI video concepts or animation projects, I'd love to hear what you're imagining.</p>
+    <div class="contact-actions">
+      <!-- TODO: replace with your real email and Instagram -->
+      <a class="button" href="mailto:YOUR-EMAIL@example.com?subject=Creative%20collaboration" data-magnetic>Start a conversation <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="underlink" href="https://www.instagram.com/your_handle" target="_blank" rel="noopener">Instagram @your_handle</a>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer class="footer"><div class="shell">
+  <span>© <span class="year"></span> CA-TOON TV — The creative universe</span>
+  <span class="footer-links">
+    <a href="https://www.youtube.com/@virendrabhakuni9150" target="_blank" rel="noopener">Music &amp; Travel</a>
+    <a href="https://www.youtube.com/@Ca-ToonTV" target="_blank" rel="noopener">Ca-Toon TV</a>
+  </span>
+  <span id="updated">Independent creator / India</span>
+  <a href="#home">Back to top <svg class="ico"><use href="#i-up"/></svg></a>
+</div></footer>
+
+<!-- Video popup -->
+<dialog class="player" id="player" aria-label="Video player">
+  <div class="player-frame" id="player-frame"></div>
+  <div class="player-bar">
+    <p class="player-title" id="player-title"></p>
+    <a class="player-yt" id="player-yt" href="#" target="_blank" rel="noopener">Watch on YouTube</a>
+    <button class="player-close" id="player-close" aria-label="Close video">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</dialog>
+
+<!-- Timestamp stops the browser from reusing an old cached copy after you re-run fetch_videos.py -->
+<script>document.write('<script src="data/videos.js?t=' + Date.now() + '"><\/script>');</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

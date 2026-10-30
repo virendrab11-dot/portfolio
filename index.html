@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Virendra Bhakuni — AI Creative Studio</title>
+  <meta name="description" content="Virendra Bhakuni, AI Creative Studio: AI music videos, travel stories and kids cartoons.">
+  <meta name="theme-color" content="#fbf9f4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Gelasio:ital,wght@0,400;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-diag" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-idea" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5zM3 13l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 5.5v13L18 12z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="site-header wrap">
+  <a class="brand" href="#top" data-magnetic>VIRENDRA<br>BHAKUNI <small>AI CREATIVE STUDIO</small></a>
+  <nav aria-label="Main"><a href="#work">Work</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+  <a class="pill" href="#contact" data-contact data-magnetic>LET'S CREATE <svg class="ico"><use href="#i-arrow"/></svg></a>
+</header>
+
+<main id="main">
+
+<!-- 01 HERO: drone shot over the name and floating video cards -->
+<section class="hero" id="top">
+  <div class="hero-pin">
+    <div class="hero-bg" aria-hidden="true"><img src="assets/hero-backdrop.jpg" alt="" width="840" height="336"></div>
+    <div class="hero-copy">
+      <div class="eyebrow">AI POWERED</div>
+      <h1 data-words>Stories<br><em>in</em> Motion.</h1>
+      <p>MUSIC&nbsp; / &nbsp;AI VIDEO&nbsp; / &nbsp;KIDS ENTERTAINMENT<br>CREATIVE STORYTELLING</p>
+      <div class="playrow"><button class="play" id="showreel" data-magnetic aria-label="Watch showreel"><svg class="ico"><use href="#i-play"/></svg></button> WATCH SHOWREEL</div>
+    </div>
+    <!-- Drone ring: 3D cards orbit the name; the name block sits on a flat layer above so it is always in front -->
+    <div class="hero-scene">
+      <div class="hero-stage" aria-hidden="true">
+        <div class="hero-camera">
+          <div class="hero-world">
+            <div class="hero-ground"></div>
+            <div class="hero-cards" id="hero-cards"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-center" id="hero-center">
+        <p class="hero-name"><span>VIRENDRA</span> <span>BHAKUNI</span></p>
+        <div class="hero-cta">
+          <p class="hero-tag">AI Creator | Music, Travel &amp; Kids Animation</p>
+          <div class="hero-btns">
+            <a class="pill" href="#music" data-magnetic>Music &amp; Travel</a>
+            <a class="pill pill--kids" href="#kids" data-magnetic>Kids Cartoons</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-ind" aria-hidden="true"><span class="scroll-line"><i></i></span><span class="scroll"><svg class="ico"><use href="#i-down"/></svg> &nbsp; SCROLL TO EXPLORE</span></div>
+    <div class="hero-side" aria-hidden="true">
+      <div class="hero-count"><span id="count-now">01</span><br><small>/ <span id="count-total">08</span></small></div>
+      <div class="hero-note"><span>Ideas</span> <span>Characters</span> <span>Music</span> <span>Motion</span></div>
+    </div>
+    <div class="hero-fade" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- 02 FEATURED WORK: 3D ring -->
+<section class="work-section" id="work" data-section="02">
+  <div class="wrap">
+    <div class="work-head">
+      <div class="work-left">
+        <div class="section-title">02<strong class="work-title">FEATURED WORK</strong></div>
+        <div class="filters" role="group" aria-label="Filter featured work">
+          <button class="filter active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter" data-filter="music" aria-pressed="false">Music</button>
+          <button class="filter" data-filter="kids" aria-pressed="false">Kids</button>
+          <button class="filter" data-filter="video" aria-pressed="false">AI Video</button>
+          <button class="filter" data-filter="experiments" aria-pressed="false">Experiments</button>
+        </div>
+      </div>
+      <a class="viewall" href="#music">VIEW ALL PROJECTS <svg class="ico"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+  <div class="ring-pin">
+    <div class="ring-stage" id="ring-stage">
+      <div class="ring-floor" aria-hidden="true"><i></i></div>
+      <div class="ring" id="ring"></div>
+    </div>
+    <div class="ring-caption" id="ring-caption" aria-hidden="true">
+      <div class="image-tag"><span id="cap-tag">[ ORIGINAL ]</span><b id="cap-kind">MUSIC VIDEO</b></div>
+      <h3 id="cap-title">Teri Aahat</h3>
+      <small id="cap-small">AI MUSIC VIDEO</small>
+      <span class="idx" id="cap-idx">01</span>
+    </div>
+    <p class="ring-hint" aria-hidden="true">Scroll or drag to rotate</p>
+  </div>
+</section>
+
+<!-- 03 MUSIC & TRAVEL: drone fly-over -->
+<section class="music-section" id="music" data-section="03" aria-labelledby="music-title">
+  <div class="fly-pin">
+    <div class="wrap music-head">
+      <div class="section-head">
+        <span class="num">03</span>
+        <div class="section-title">AI Music Videos<strong id="music-title" data-words>Music &amp; Travel</strong></div>
+      </div>
+      <p class="music-sub">Original songs<br>&amp; cinematic stories</p>
+      <a class="pill pill--gold" data-subscribe="music" href="https://www.youtube.com/@virendrabhakuni9150?sub_confirmation=1" target="_blank" rel="noopener" data-magnetic>Subscribe <svg class="ico"><use href="#i-diag"/></svg></a>
+    </div>
+    <div class="fly-stage">
+      <div class="fly-plane" id="fly-plane">
+        <div class="fly-grid" id="music-videos"></div>
+        <div class="fly-label">AI Video<br>&amp; Experiments<small>Visual storytelling<br>&amp; creative shorts</small></div>
+        <div class="fly-shorts" id="music-shorts"></div>
+      </div>
+      <div class="fly-fog" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 KIDS CARTOONS -->
+<section class="kids-section" id="kids" data-section="04" aria-labelledby="kids-title">
+  <div class="kids-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="kids-doodles" aria-hidden="true">
+    <svg class="dd dd-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>
+    <svg class="dd dd-cloud" viewBox="0 0 48 28"><path d="M13 27a10 10 0 0 1-1.6-19.9A12 12 0 0 1 34 6.5 9 9 0 1 1 37 27z"/></svg>
+    <svg class="dd dd-note" viewBox="0 0 24 24"><path d="M9 18.5V5l11-2v12.5" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18.5" r="3"/><circle cx="17.5" cy="15.5" r="3"/></svg>
+    <svg class="dd dd-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4 7 4c2.2 0 3.6 1.3 5 3 1.4-1.7 2.8-3 5-3 4 0 6.1 4.2 4.6 7.7C19.5 16.4 12 21 12 21z"/></svg>
+    <svg class="dd dd-star2" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>
+    <svg class="dd dd-cloud2" viewBox="0 0 48 28"><path d="M13 27a10 10 0 0 1-1.6-19.9A12 12 0 0 1 34 6.5 9 9 0 1 1 37 27z"/></svg>
+  </div>
+  <div class="wrap">
+    <div class="kids-head">
+      <p class="kids-kicker"><span class="num">04</span> · KIDS ENTERTAINMENT</p>
+      <h2 class="kids-title" id="kids-title" data-letters>Kids Cartoons</h2>
+      <div class="kids-headrow">
+        <p class="kids-sub">Nursery rhymes, characters &amp; animated songs</p>
+        <a class="pill pill--kids" data-subscribe="kids" href="https://www.youtube.com/@Ca-ToonTV?sub_confirmation=1" target="_blank" rel="noopener" data-magnetic>Subscribe <svg class="ico"><use href="#i-diag"/></svg></a>
+      </div>
+    </div>
+
+    <!-- Retro TV (featured cartoon) + 2x2 picks that swap onto the TV -->
+    <div class="kids-stage">
+      <div class="kids-tvcol">
+        <div class="tv" id="kids-tv">
+          <span class="tv-antenna" aria-hidden="true"><i></i><i></i></span>
+          <div class="tv-body">
+            <button class="tv-screen" id="tv-screen">
+              <img alt="" width="1280" height="720">
+              <span class="tv-play" aria-hidden="true"><svg class="ico"><use href="#i-play"/></svg></span>
+            </button>
+            <div class="tv-panel" aria-hidden="true"><i class="knob"></i><i class="knob"></i><span class="grill"></span></div>
+          </div>
+          <span class="tv-feet" aria-hidden="true"><i></i><i></i></span>
+        </div>
+        <div class="tv-caption" aria-live="polite">
+          <span class="spot-badge" id="spot-badge">Most watched</span>
+          <h3 class="spot-title" id="spot-title"></h3>
+          <p class="spot-meta" id="spot-meta"></p>
+          <button class="pill pill--kids" id="spot-play" data-magnetic><svg class="ico"><use href="#i-play"/></svg> Watch now</button>
+        </div>
+      </div>
+      <div class="kids-picks" id="kids-picks" role="group" aria-label="Choose a cartoon for the TV"></div>
+    </div>
+
+    <!-- More cartoons: character tabs + a sideways-scrolling row -->
+    <div class="kids-more">
+      <div class="kids-tabs" id="kids-tabs" role="group" aria-label="Filter cartoons by character"></div>
+      <div class="row-nav">
+        <button class="row-btn" data-dir="-1" aria-label="Scroll cartoons left"><svg class="ico" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
+        <button class="row-btn" data-dir="1" aria-label="Scroll cartoons right"><svg class="ico"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <div class="kids-row" id="kids-row"></div>
+  </div>
+</section>
+
+<!-- 05 ABOUT -->
+<section class="about-section" id="about" data-section="05" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <div class="about-photo"><img src="assets/about.jpg" alt="Portrait of Virendra Bhakuni" width="800" height="800" loading="lazy"></div>
+    <div class="about-copy">
+      <div class="section-title">05 / ABOUT</div>
+      <h2 id="about-title" data-words>Hi, I'm<br>Virendra Bhakuni.</h2>
+      <p>AI Creator / Content Producer / Storyteller. Creating music, animated worlds and visual stories with AI — blending creativity, technology and emotion.</p>
+      <dl class="about-stats" id="about-stats"></dl>
+      <a class="pill" href="#contact" data-contact data-magnetic>LET'S CONNECT <svg class="ico"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- 06 THE PROCESS -->
+<section class="process-section" id="process" data-section="06" aria-labelledby="process-title">
+  <div class="wrap">
+    <div class="section-title">06 / THE PROCESS</div>
+    <h2 class="process-title" id="process-title" data-words>From Idea to Imagination.</h2>
+    <ol class="timeline">
+      <li class="tl-line" aria-hidden="true"><i></i></li>
+      <li class="step"><div class="step-icon"><svg class="ico"><use href="#i-idea"/></svg></div><div class="stepno">01</div><h3>Concept</h3><p>Idea &amp; Storytelling</p></li>
+      <li class="step"><div class="step-icon"><svg class="ico"><use href="#i-layers"/></svg></div><div class="stepno">02</div><h3>AI Production</h3><p>Music, Visuals &amp; Characters</p></li>
+      <li class="step"><div class="step-icon"><svg class="ico"><use href="#i-cut"/></svg></div><div class="stepno">03</div><h3>Creative Editing</h3><p>Animation &amp; Sound Design</p></li>
+      <li class="step"><div class="step-icon"><svg class="ico"><use href="#i-out"/></svg></div><div class="stepno">04</div><h3>Final Output</h3><p>A World Comes Alive</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 07 STATS -->
+<section class="wrap stats-section" id="stats" data-section="07" aria-labelledby="stats-title">
+  <div class="section-head"><span class="num">07</span><div class="section-title">BY THE NUMBERS<strong id="stats-title" data-words>Recent uploads.</strong></div></div>
+  <dl class="stats" id="stats-grid"></dl>
+  <p class="stats-note">From each channel's latest uploads (up to 15 per channel) in YouTube's public feed.</p>
+</section>
+
+</main>
+
+<!-- 08 CONTACT -->
+<footer id="contact" data-section="08">
+  <div class="wrap foot">
+    <strong><span class="num foot-num">08</span>VIRENDRA BHAKUNI</strong>
+    <small>AI CREATIVE STUDIO · MUSIC · VIDEO · KIDS STORIES</small>
+    <a class="pill pill--light" href="#contact" data-contact data-magnetic>GET IN TOUCH <svg class="ico"><use href="#i-arrow"/></svg></a>
+  </div>
+  <div class="wrap foot-links">
+    <a href="https://www.youtube.com/@virendrabhakuni9150" target="_blank" rel="noopener">Music &amp; Travel on YouTube</a>
+    <a href="https://www.youtube.com/@Ca-ToonTV" target="_blank" rel="noopener">Ca-Toon TV on YouTube</a>
+    <!-- TODO: replace with your real email (also in the contact form below) -->
+    <a href="mailto:YOUR-EMAIL@example.com">Email me directly</a>
+    <span id="updated"></span>
+  </div>
+</footer>
+
+<!-- Video popup -->
+<dialog class="player" id="player" aria-label="Video player">
+  <div class="player-frame" id="player-frame"></div>
+  <div class="player-bar">
+    <p class="player-title" id="player-title"></p>
+    <a class="player-yt" id="player-yt" href="#" target="_blank" rel="noopener">Watch on YouTube</a>
+    <button class="player-close" id="player-close" aria-label="Close video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+</dialog>
+
+<!-- Contact form (opened by every Let's Create / Let's Connect / Get in touch button) -->
+<dialog class="contact-modal" id="contact-modal" aria-labelledby="cf-title">
+  <button class="cf-close" type="button" aria-label="Close contact form"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="cf-panel" id="cf-panel">
+    <p class="cf-eyebrow">LET'S CREATE</p>
+    <h2 class="cf-title" id="cf-title">Get in touch</h2>
+    <form class="cf-form" id="contact-form" novalidate>
+      <div class="cf-field">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100" aria-describedby="cf-name-err">
+        <p class="cf-err" id="cf-name-err"></p>
+      </div>
+      <div class="cf-field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="150" aria-describedby="cf-email-err">
+        <p class="cf-err" id="cf-email-err"></p>
+      </div>
+      <div class="cf-field">
+        <label for="cf-subject">Subject</label>
+        <select id="cf-subject" name="subject" required aria-describedby="cf-subject-err">
+          <option value="" selected disabled>Choose a subject</option>
+          <option>Music video</option>
+          <option>Kids animation</option>
+          <option>Collaboration</option>
+          <option>Other</option>
+        </select>
+        <p class="cf-err" id="cf-subject-err"></p>
+      </div>
+      <div class="cf-field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required minlength="10" maxlength="3000" aria-describedby="cf-message-err"></textarea>
+        <p class="cf-err" id="cf-message-err"></p>
+      </div>
+      <!-- Honeypot: hidden from people, bots tend to fill it in -->
+      <div class="cf-hp" aria-hidden="true">
+        <label for="cf-website">Website</label>
+        <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <button class="pill cf-submit" type="submit"><span class="cf-spinner" aria-hidden="true"></span><span class="cf-label">Send message</span></button>
+      <p class="cf-status" id="cf-status" role="status" aria-live="polite"></p>
+      <!-- TODO: replace with your real email -->
+      <p class="cf-direct">Prefer email? <a href="mailto:YOUR-EMAIL@example.com">Email me directly</a></p>
+    </form>
+  </div>
+  <div class="cf-success" id="cf-success" hidden tabindex="-1">
+    <span class="cf-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+    <h2 class="cf-title">Thank you!</h2>
+    <p>Your message is on its way. I'll get back to you soon.</p>
+    <button class="pill" type="button" id="cf-done">Close</button>
+  </div>
+</dialog>
+
+<!-- Timestamp stops the browser from reusing an old cached copy after you re-run fetch_videos.py -->
+<script>document.write('<script src="data/videos.js?t=' + Date.now() + '"><\/script>');</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
