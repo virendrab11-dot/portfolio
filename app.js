@@ -597,7 +597,7 @@ function heroRing(mode) {
     const n = holders.length;
     // Ring radius from the space available (width and height), card size from the radius, so
     // neighbours never touch: the gap between card centres is 2R·sin(π/n), at least 1.45 card widths.
-    const R = small ? Math.min(innerWidth * .34, 150) : Math.min(innerWidth * .17, innerHeight * .34, 300);
+    const R = small ? Math.min(innerWidth * .34, innerHeight * .155, 150) :Math.min(innerWidth * .17, innerHeight * .34, 300);
     const cardW = Math.min(R * (small ? .6 : .42), (2 * R * Math.sin(Math.PI / n)) / 1.45);
     root.style.setProperty("--hc-w", `${cardW}px`);
     center.style.setProperty("--hn", `${Math.max(16, R * (small ? .15 : .12))}px`); // small one-line name label
@@ -795,10 +795,10 @@ function ring3D() {
     scrollTrigger: { trigger: ".work-section", start: "top top", end: "+=220%", pin: true, scrub: 1, anticipatePin: 1 },
   });
 
-  // Drag to rotate (desktop pointer), with a little inertia and snap to the nearest card
+  // Drag (mouse) or swipe sideways (touch; vertical swipes still scroll, see touch-action) to rotate,
+  // with a little inertia and snap to the nearest card
   let startX = 0, startDrag = 0, lastX = 0, lastT = 0, vel = 0, moved = false;
   const onDown = (e) => {
-    if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
     gsap.killTweensOf(st, "drag");
     startX = lastX = e.clientX; startDrag = st.drag; lastT = performance.now(); vel = 0; moved = false;
     stage.classList.add("dragging");
@@ -879,6 +879,12 @@ function flyOver() {
 
   // Smaller windows sit the camera further back so the cards don't fill the screen
   const flyDepth = () => -220 - Math.max(0, 900 - innerHeight) * .9 - Math.max(0, 1440 - innerWidth) * .6;
+  // Where the flight stops: last row mid-screen. The further back the camera sits (smaller windows),
+  // the higher the plane appears, so the flight stops earlier; phones' tall screens need the most.
+  const flyEnd = () => {
+    const k = innerWidth < 900 ? 1 : .6 + Math.min(.3, (-flyDepth() - 220) / 900);
+    return -(plane.offsetHeight - innerHeight * k);
+  };
 
   const tl = gsap.timeline({
     defaults: { ease: "none" },
@@ -888,7 +894,7 @@ function flyOver() {
   // Travel ends with the last row (Shorts) framed in the middle of the screen.
   tl.fromTo(plane,
     { xPercent: -50, x: -30, z: () => flyDepth(), y: () => innerHeight * .3, rotationX: 60, rotationZ: -5 },
-    { xPercent: -50, x: 30, z: () => flyDepth(), y: () => -(plane.offsetHeight - innerHeight * .5), rotationX: 50, rotationZ: 4, duration: 1 }, 0)
+    { xPercent: -50, x: 30, z: () => flyDepth(), y: () => flyEnd(), rotationX: 50, rotationZ: 4, duration: 1 }, 0)
     // Cards surface slowly out of the dark as the camera reaches them
     .to(cards, { opacity: 1, duration: .24, ease: "power1.out", stagger: .6 / Math.max(cards.length, 1) }, 0);
 
@@ -1082,11 +1088,13 @@ if (window.gsap && window.ScrollTrigger && !proxyBrowser) {
     el.innerHTML = `<span class="sr-only">${esc(text)}</span><span aria-hidden="true">${letters}</span>`;
   });
 
+  // Phones: the address bar showing/hiding resizes the viewport; don't re-layout pinned scenes for that
+  ScrollTrigger.config({ ignoreMobileResize: true });
   const mm = gsap.matchMedia();
   mm.add({
-    // 3D works down to small laptop windows (e.g. 1920x1080 at 150% scaling ≈ 1280x560 inside the browser)
-    desk: "(min-width: 900px) and (min-height: 420px) and (prefers-reduced-motion: no-preference)",
-    flat: "(max-width: 899px) and (prefers-reduced-motion: no-preference), (max-height: 419px) and (prefers-reduced-motion: no-preference)",
+    // 3D on every screen tall enough for it, phones included; only very short windows (phones in landscape) go flat
+    desk: "(min-height: 420px) and (prefers-reduced-motion: no-preference)",
+    flat: "(max-height: 419px) and (prefers-reduced-motion: no-preference)",
     reduce: "(prefers-reduced-motion: reduce)",
   }, (ctx) => {
     const cleanups = [];
@@ -1105,7 +1113,7 @@ if (window.gsap && window.ScrollTrigger && !proxyBrowser) {
       flyOver();
       if (finePointer) cleanups.push(pointerDetails());
     } else {
-      // Phone version: smaller hero ring that circles on its own, no pinning, light fades elsewhere
+      // Short landscape windows: smaller hero ring that circles on its own, no pinning, light fades elsewhere
       cleanups.push(heroRing("mobile"));
       ringFlat();
       musicFlat();

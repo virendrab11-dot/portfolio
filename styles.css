@@ -503,6 +503,9 @@ footer :focus-visible { outline-color: var(--gold); }
   .hero-3d .hero-pin { --cx: 50%; --cy: 50%; height: auto; min-height: 100svh; display: flex; flex-direction: column; padding: 100px 0 70px; }
   .hero-3d .hero-copy { position: relative; left: auto; right: auto; top: auto; padding: 0 var(--gutter); }
   .hero-3d .hero-scene { position: relative; inset: auto; height: 470px; margin-top: 4px; }
+  /* Pinned (3D) hero: exactly one screen tall, the ring takes whatever is left under the copy */
+  .is-3d .hero-pin { height: 100svh; }
+  .is-3d .hero-scene { flex: 1; height: auto; min-height: 0; }
   .hero-3d .hero-stage { perspective: 900px; }
   .hero-3d .hero-note { display: none; }
   .hero-3d .hero-bg::after { background: linear-gradient(180deg, rgba(251,249,244,.88) 0%, rgba(251,249,244,.8) 42%, rgba(251,249,244,.2) 70%, rgba(251,249,244,0) 100%); }
@@ -564,10 +567,32 @@ footer :focus-visible { outline-color: var(--gold); }
     radial-gradient(60% 40% at 50% 34%, rgba(217,163,91,.10), transparent 70%);
 }
 .is-3d .fly-label { color: var(--m-text); }
+/* Small laptops: keep the full desktop landscape (the flat ≤1100px grid makes the Shorts too tall to fly over) */
+@media (min-width: 900px) {
+  .is-3d .fly-grid { grid-template-columns: repeat(4, 1fr); }
+  .is-3d .fly-shorts { grid-template-columns: repeat(7, 1fr); }
+}
 
 .ring-floor { display: none; }
 .is-3d .ring-floor { display: block; position: absolute; left: 60%; top: 42%; width: 1px; height: 1px; transform-style: preserve-3d; pointer-events: none; }
 .is-3d .ring-floor i { position: absolute; width: 90vmin; height: 90vmin; left: -45vmin; top: -45vmin; border-radius: 50%; border: 1px solid rgba(201, 149, 69, .5); background: radial-gradient(circle, rgba(201,149,69,.12), transparent 65%); }
+
+/* Phones: same 3D scenes, centred and sized for a narrow screen */
+@media (max-width: 899px) {
+  .is-3d .ring, .is-3d .ring-floor { left: 50%; top: 40%; }
+  .is-3d .rc { width: clamp(120px, 36vw, 170px); }
+  .is-3d .ring-caption { left: var(--gutter); right: var(--gutter); bottom: 64px; width: auto; }
+  .is-3d .ring-caption h3 { font-size: 34px; -webkit-line-clamp: 1; }
+  .is-3d .ring-hint { left: var(--gutter); right: auto; bottom: 28px; font-size: 10px; }
+  /* Fly-over: a landscape wider than the screen (it recedes in perspective) with larger cards than the flat grid */
+  .is-3d .music-head { top: 28px; padding: 0 var(--gutter); }
+  .is-3d .music-sub { font-size: 16px; }
+  .is-3d .music-head > .pill--gold { flex: 0 0 auto; }
+  .is-3d .fly-plane { width: 170vw; top: 36%; }
+  .is-3d .fly-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .is-3d .fly-shorts { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .is-3d .fly-label { margin: 28px 0 12px; }
+}
 
 /* =========================================================
    Contact form (dialog)
