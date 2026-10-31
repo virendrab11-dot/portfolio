@@ -750,6 +750,8 @@ function trig(el, start = "top 85%", end) {
 }
 
 function scrollToY(y, immediate) {
+  // Lenis caps scrolling at the page height it last measured; make sure that includes the scene track
+  lenis?.resize();
   // Instant jumps go native first (the CSS smooth scrolling would animate them), then Lenis catches up
   if (immediate) window.scrollTo({ top: y, behavior: "instant" });
   if (lenis) lenis.scrollTo(y, immediate ? { immediate: true, force: true } : { duration: 1.6, force: true });
@@ -800,6 +802,7 @@ function sceneStack(desk) {
       y += s.own + s.rev;
       s.seg.style.height = `${i < S.length - 1 ? s.own + s.rev : s.own + H()}px`;
     });
+    lenis?.resize();   // the page just changed height
   }
   layout();
   ScrollTrigger.addEventListener("refreshInit", layout);
@@ -921,9 +924,13 @@ function sceneStack(desk) {
     ["wheel", "touchstart", "keydown"].forEach((t) => removeEventListener(t, stopHash));
   };
   if (hashEl) {
+    // Jump now and after load too: the browser's own hash jump lands where the section sat on the normal page, and
+    // on phones the refresh can run before this listener exists, so waiting for one alone could leave us there
     ScrollTrigger.addEventListener("refresh", toHash);
     ["wheel", "touchstart", "keydown"].forEach((t) => addEventListener(t, stopHash, { passive: true }));
-    setTimeout(stopHash, 4000);
+    requestAnimationFrame(toHash);
+    const afterLoad = () => { toHash(); setTimeout(stopHash, 4000); };
+    if (document.readyState === "complete") afterLoad(); else addEventListener("load", afterLoad, { once: true });
   }
 
   // ---- Reveals: each is drawn from its scroll progress, so scrubbing and reversing are exact ----
