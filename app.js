@@ -246,11 +246,69 @@ $("#kids-picks").addEventListener("click", (e) => {
   if (kidsSwapFx) kidsSwapFx(swap, pick); else swap();
 });
 
-// Row arrows scroll by most of a screen
-$$(".row-btn").forEach((btn) => btn.addEventListener("click", () => {
-  const row = $("#kids-row");
-  row.scrollBy({ left: Number(btn.dataset.dir) * row.clientWidth * .8, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-}));
+// ---- Cartoon carousel: whole cards across the row; arrows and keys slide it one card, dots jump; swipe snaps natively.
+// The card nearest the centre is a little larger with a stronger shadow. Reduced motion: instant, no scaling.
+const kidsCar = (() => {
+  const car = $(".kids-car"), row = $("#kids-row");
+  if (!car || !row) return null;
+  const prev = $(".row-prev", car), next = $(".row-next", car), dots = $(".kids-dots", car);
+  const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches || !window.gsap;
+  let cards = [], L = null, at = 0, slide = null, frame = 0;
+  // Layout (read once per change, not while sliding): card positions, the step between them, the furthest position
+  function measure() {
+    cards = $$(".kcard:not(.is-hidden)", row);
+    const pad = parseFloat(getComputedStyle(row).paddingLeft) || 0;
+    const step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : row.clientWidth;
+    const max = Math.max(0, row.scrollWidth - row.clientWidth);
+    L = { pad, step, max, mid: row.clientWidth / 2, last: Math.max(0, Math.round(max / step)),
+          centres: cards.map((c) => c.offsetLeft + c.offsetWidth / 2), w: cards[0]?.offsetWidth || 1 };
+    // Arrows: centred on the card pictures
+    const th = cards[0] && $(".kthumb", cards[0]);
+    if (th) car.style.setProperty("--arrow-y", `${row.offsetTop + cards[0].offsetTop + th.offsetTop + th.offsetHeight / 2}px`);
+    dots.innerHTML = L.last ? Array.from({ length: L.last + 1 }, (_, i) => `<button type="button" tabindex="-1" data-i="${i}"></button>`).join("") : "";
+  }
+  const index = () => Math.round(row.scrollLeft / L.step);
+  function update() {
+    frame = 0;
+    if (!L) measure();
+    at = Math.min(L.last, Math.max(0, index()));
+    prev.disabled = row.scrollLeft <= 2;
+    next.disabled = row.scrollLeft >= L.max - 2;
+    $$("button", dots).forEach((d, i) => d.setAttribute("aria-current", String(i === at)));
+    // Centre card: up to 4% larger with a deeper shadow, eased by its distance from the row's centre
+    const s = row.scrollLeft;
+    cards.forEach((c, i) => {
+      const k = still() ? 0 : Math.max(0, 1 - Math.abs(L.centres[i] - s - L.mid) / L.w);
+      c.style.scale = k ? String(1 + .04 * k) : "";
+      c.style.setProperty("--lift", k.toFixed(3));
+    });
+  }
+  // Slide to position i (one card per step): power3 over .6s, with snapping off while it moves
+  function go(i) {
+    if (!L) measure();
+    const to = Math.min(L.max, Math.max(0, i * L.step));
+    slide?.kill();
+    if (still()) { row.scrollLeft = to; return update(); }
+    row.style.scrollSnapType = "none";
+    const o = { x: row.scrollLeft };
+    slide = gsap.to(o, { x: to, duration: .6, ease: "power3.out", onUpdate: () => { row.scrollLeft = o.x; },
+      onComplete: () => { row.style.scrollSnapType = ""; slide = null; } });
+  }
+  [prev, next].forEach((b) => b.addEventListener("click", () => go(at + Number(b.dataset.dir))));
+  dots.addEventListener("click", (e) => { const d = e.target.closest("button"); if (d) go(Number(d.dataset.i)); });
+  row.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    go(at + (e.key === "ArrowRight" ? 1 : -1));
+  });
+  row.addEventListener("scroll", () => { if (!frame) frame = requestAnimationFrame(update); }, { passive: true });
+  const relayout = () => { L = null; update(); };
+  addEventListener("resize", relayout);
+  addEventListener("load", relayout, { once: true });
+  relayout();
+  // Switching tabs: back to the start, with the arrows and dots for the new set of cards
+  return { reset() { slide?.kill(); row.style.scrollSnapType = ""; row.scrollLeft = 0; relayout(); }, relayout };
+})();
 
 let kidsFilterFx = null; // set by kidsMotion for a bouncy re-entry
 $("#kids-tabs").addEventListener("click", (e) => {
@@ -264,7 +322,7 @@ $("#kids-tabs").addEventListener("click", (e) => {
     c.classList.toggle("is-hidden", !on);
     if (on) shown.push(c);
   });
-  $("#kids-row").scrollTo({ left: 0 });
+  kidsCar?.reset();
   kidsFilterFx?.(shown);
 });
 
@@ -541,7 +599,8 @@ function wordReveal(el, opts = {}) {
 // ---- Smooth scrolling (desktop) ----
 function initLenis() {
   if (!window.Lenis) return null;
-  const l = new Lenis({ lerp: 0.09 });
+  // Smooth wheel scrolling only: touch scrolling stays native (no interpolation on phones); driven by GSAP's ticker
+  const l = new Lenis({ lerp: 0.09, syncTouch: false, autoRaf: false });
   l.on("scroll", ScrollTrigger.update);
   const tick = (t) => l.raf(t * 1000);
   gsap.ticker.add(tick);
@@ -608,12 +667,10 @@ const poseAt = (track, p) => track.reduce((cur, [at, n]) => (p >= at ? n : cur),
 // A moment drawn from scroll: draw(p) gets the progress (0–1) of a scroll range whenever it changes and after refreshes
 const scrubbed = (range, draw) => ScrollTrigger.create({ ...range, onUpdate: (self) => draw(self.progress), onRefresh: (self) => draw(self.progress) });
 // Endless tweens in a scene only run while that scene is on screen (scene stack); get(): the tweens, which may come later
+// (the one shared helper: the scene stack switches them as the scene shows and hides; returns { isActive })
 function whileShown(id, get) {
   if (!stack) return null;
-  const set = (on) => get().forEach((t) => t?.paused(!on));
-  const st = ScrollTrigger.create({ ...stack.span(id), onToggle: (self) => set(self.isActive) });
-  set(st.isActive);
-  return st;
+  return stack.life(id, (on) => get().forEach((t) => t?.paused(!on)));
 }
 
 // Layers: .girl moves her around, .girl-act squashes/tilts/hops, .girl-breath breathes
@@ -622,12 +679,18 @@ function makeGirl(host, cls, poses = Object.keys(GIRL)) {
   el.className = `girl ${cls}`;
   el.setAttribute("aria-hidden", "true");
   el.innerHTML = `<span class="girl-shadow"></span><div class="girl-act"><div class="girl-breath">${poses.map((n) => [n, GIRL[n]]).map(([n, [w, h, fx]]) =>
-    `<img class="gp" data-pose="${n}" src="${girlSrc(n)}" alt="" width="${w}" height="${h}" decoding="async" draggable="false" style="height:calc(var(--gh) * ${(h / GIRL_H).toFixed(4)});translate:${(-fx * 100).toFixed(1)}% 0">`).join("")}</div></div>`;
+    `<img class="gp" data-pose="${n}" src="${girlSrc(n)}" alt="" width="${w}" height="${h}" decoding="async"${cls.includes("intro") ? "" : ' loading="lazy"'} draggable="false" style="height:calc(var(--gh) * ${(h / GIRL_H).toFixed(4)});translate:${(-fx * 100).toFixed(1)}% 0">`).join("")}</div></div>`;
   host.append(el);
   const imgs = Object.fromEntries($$(".gp", el).map((im) => [im.dataset.pose, im]));
   const act = $(".girl-act", el);
   const breathEl = $(".girl-breath", el);
-  const breath = gsap.to(breathEl, { scaleY: 1.022, scaleX: .99, duration: 1.5, ease: "sine.inOut", repeat: -1, yoyo: true });
+  // Breathing runs only while her scene shows (scene stack) and her current move allows it
+  const tween = gsap.to(breathEl, { scaleY: 1.022, scaleX: .99, duration: 1.5, ease: "sine.inOut", repeat: -1, yoyo: true });
+  let want = true, shown = true;
+  const apply = () => tween.paused(!(want && shown));
+  const breath = { paused(v) { if (v === undefined) return !want; want = !v; apply(); return breath; }, play() { return breath.paused(false); }, pause() { return breath.paused(true); }, kill: () => tween.kill() };
+  const sc = stack && host.closest(".scene");
+  if (sc) stack.life(sc.className.match(/scene--(\w+)/)[1], (on) => { shown = on; apply(); });
   const shadow = $(".girl-shadow", el);
   let cur = null;
   return {
@@ -646,7 +709,7 @@ function makeGirl(host, cls, poses = Object.keys(GIRL)) {
       if (prev) gsap.set(prev, { zIndex: 0 }), gsap.to(prev, { opacity: 0, duration: fade / 2, delay: fade / 2, overwrite: true });
     },
     destroy() {
-      breath.kill();
+      tween.kill();
       gsap.killTweensOf([el, act, breathEl, ...Object.values(imgs)]);
       el.remove();
     },
@@ -718,7 +781,7 @@ function sceneStack(desk) {
     const seg = document.createElement("div");
     track.append(seg);
     // bg: a background that stays put while the scene's content scrolls over it (the jungle)
-    return { id, i, sec, el, fx, seg, bg: $(".kids-bg", sec), top: 0, own: 0, lead: 0, ov: 0, y: 0, on: true };
+    return { id, i, sec, el, fx, seg, bg: $(".kids-bg", sec), top: 0, own: 0, lead: 0, ov: 0, y: 0, on: true, life: [] };
   });
   document.body.append(track);
   root.classList.add("is-stack");
@@ -752,7 +815,13 @@ function sceneStack(desk) {
       const on = i === c || (opening && i === c + 1);
       // Its leaves drift up a little as the scene is scrolled
       if (on && s.leaves) gsap.set(s.leaves.wrap, { y: -18 * clamp01((y - s.top) / Math.max(1, s.own)) });
-      if (on !== s.on) { s.on = on; s.el.classList.toggle("is-off", !on); }
+      if (on !== s.on) {
+        s.on = on;
+        s.el.classList.toggle("is-off", !on);
+        s.el.classList.toggle("is-live", on);   // (layers and loops only while it shows)
+        s.sec.style.willChange = on && s.ov ? "transform" : "";   // its content moves with every scroll frame
+        s.life.forEach((fn) => fn(on));
+      }
       const near = i === c + 1;
       if (near !== s.near) { s.near = near; s.el.classList.toggle("is-near", near); }
       // Native lazy loading can't tell when a fixed layer is about to show: load its images once it's next up
@@ -793,6 +862,13 @@ function sceneStack(desk) {
     },
     // The reveal that leaves this scene (half a screen)
     rev(id) { const s = S[ix(id)]; return { start: () => s.top + s.own, end: () => s.top + s.own + s.rev }; },
+    // Run fn(on) whenever the scene shows or hides (endless tweens pause while it's off screen)
+    life(id, fn) {
+      const s = S[ix(id)];
+      s.life.push(fn);
+      fn(s.on);
+      return { get isActive() { return s.on; } };
+    },
     // While its tall content scrolls up
     inner(id) { const s = S[ix(id)]; return { start: () => s.top + s.lead, end: () => s.top + s.lead + Math.max(1, s.ov) }; },
     contentTravel: (id) => S[ix(id)].ov,
@@ -891,7 +967,8 @@ function sceneStack(desk) {
     made.push(wrap);
     wrap.innerHTML = cfg.corners.map((c, k) => {
       const flip = (s.i + k) % 2 === 1;   // every other one uses the opposite corner's picture, mirrored
-      return `<i class="sl-leaf sl-${c}" data-c="${c}" style="--tilt:${((s.i * 7 + k * 11) % 13) - 6}deg"><img src="assets/leaves/leaves-${LEAF_FILE[flip ? MIRROR[c] : c]}.webp" alt=""${flip ? ' class="is-flip"' : ""} loading="lazy" decoding="async"></i>`;
+      const f = `assets/leaves/leaves-${LEAF_FILE[flip ? MIRROR[c] : c]}`;
+      return `<i class="sl-leaf sl-${c}" data-c="${c}" style="--tilt:${((s.i * 7 + k * 11) % 13) - 6}deg"><img src="${f}.webp" srcset="${f}-600.webp 600w, ${f}.webp 1200w" sizes="(max-width: 599px) 52vw, 28vw" alt=""${flip ? ' class="is-flip"' : ""} loading="lazy" decoding="async"></i>`;
     }).join("");
     s.leaves = { wrap, all: $$(".sl-leaf", wrap), cfg, on: [] };
     s.loaded = false;   // its new pictures load with the scene's others (see update)
@@ -932,8 +1009,12 @@ function sceneStack(desk) {
   function reveal(i, draw, overlays = []) {
     const a = S[i], b = S[i + 1];
     const go = (self) => {
-      const p = self.progress;
-      overlays.forEach((o) => (o.style.visibility = p > 0 && p < 1 ? "visible" : "hidden"));
+      const p = self.progress, playing = p > 0 && p < 1;
+      overlays.forEach((o) => { o.style.visibility = playing ? "visible" : "hidden"; o.classList.toggle("is-playing", playing); });
+      if (playing !== a.playing) {
+        a.playing = playing;
+        a.el.style.willChange = b.fx.style.willChange = playing ? "transform" : "";
+      }
       draw(p, a, b);
       sweep(a, ramp(p, 0, .7, "power2.in"));
       sweep(b, 1 - ramp(p, .3, 1, "power2.out"));
@@ -1047,7 +1128,7 @@ function sceneStack(desk) {
     cover.style.opacity = p < .5 ? ramp(p, .22, .5) : 1 - ramp(p, .5, .82);
     b.fx.style.opacity = p < .5 ? 0 : "";
     const k = ramp(p, .5, .9);
-    const amp = desk && k > 0 ? (1 - k) * Math.min(W(), H()) * .018 : 0;
+    const amp = desk && W() >= 600 && k > 0 ? (1 - k) * Math.min(W(), H()) * .018 : 0;   // (no shake on phones)
     const beat = (at) => Math.max(0, 1 - Math.abs(p - at) / .05);
     gsap.set(b.fx, { x: amp * Math.sin(p * 190), y: amp * Math.cos(p * 150), scale: 1.05 - .05 * ramp(p, .5, 1, "power2.out") + .035 * (beat(.62) + beat(.76)) });
   }, [vines]);
@@ -1585,7 +1666,7 @@ function heroRing(mode) {
   const A = mode === "static" ? { tilt: 58, orbit: 18, z: 0, scale: 1 } : { tilt: 6, orbit: -80, z: -520, scale: .62 };
   const D = { z: 0 }; // scroll dolly (desktop)
   let front = -1;
-  let frame = 0;
+  let checked = 0;
 
   function render(force) {
     const z = A.z + D.z;
@@ -1597,8 +1678,10 @@ function heroRing(mode) {
 
     // Fade cards behind the name block; enlarge the front-most clear card and show its title
     // (on phones the tagline and buttons sit below the ring, so only the name counts). Measuring every card forces
-    // a layout, so while animating this runs every third frame; its class changes ease in over .45s anyway.
-    if (force !== true && ++frame % 3) return;
+    // a layout, so while animating this runs at most 4 times a second; its class changes ease in over .45s anyway.
+    const now = performance.now();
+    if (force !== true && now - checked < 250) return;
+    checked = now;
     const c = (small ? $(".hero-name") : center).getBoundingClientRect();
     const pad = 6;
     let best = -1, bestBottom = -Infinity;
@@ -2044,7 +2127,7 @@ function kidsMotion(desk) {
   };
 
   // Tabs pop in like bubbles
-  gsap.from(".ktab, .row-btn", { scale: 0, opacity: 0, duration: .7, ease: "back.out(2.2)", stagger: .05, scrollTrigger: trig(".kids-more", "top 92%") });
+  gsap.from(".ktab", { scale: 0, opacity: 0, duration: .7, ease: "back.out(2.2)", stagger: .05, scrollTrigger: trig(".kids-more", "top 92%") });
 
   // Row cards bounce in as the row arrives
   const cards = $$("#kids-row .kcard");
@@ -2086,10 +2169,10 @@ function kidsJungle(desk) {
   flies.forEach((el, i) => { gsap.set(el, { left: 0, top: 0, ...point() }); wander(el, i); });
 
   const run = (on) => { scene.classList.toggle("is-paused", !on); cur.forEach((t) => t?.[on ? "resume" : "pause"]()); };
-  const st = ScrollTrigger.create({ ...(stack ? stack.span("kids") : { trigger: scene, start: "top bottom", end: "bottom top" }), onToggle: (self) => run(self.isActive) });
-  run(st.isActive);
+  const st = stack ? null : ScrollTrigger.create({ trigger: scene, start: "top bottom", end: "bottom top", onToggle: (self) => run(self.isActive) });
+  if (stack) stack.life("kids", run); else run(st.isActive);
   return () => {
-    st.kill();
+    st?.kill();
     tweens.forEach((t) => t.kill());
     cur.forEach((t) => t?.kill());
     gsap.set(pic, { clearProps: "transform" });
@@ -2213,6 +2296,9 @@ function kidsGirl(mode) {
   gsap.set(bits, { scale: 0 });
   const float = gsap.parseEase("girlFloat") ?? gsap.parseEase("sine.out");
   const tvW = cached(() => tv.offsetWidth);
+  // Layout positions inside the section (the TV's own bounce-in offset can't skew them)
+  const sec = $(".kids-section");
+  const box = (e) => { let x = 0, y = 0; for (let n = e; n && n !== sec; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; } return { x, y, w: e.offsetWidth, h: e.offsetHeight }; };
   const FALL = [[0, "fall"], [.86, "safari-land"]];
   const AFTER = [[0, "safari-land"], [.12, "safari-look"], [.45, "safari-walk"], [.75, "safari-wave"]];
   let f = 0, g = 0, path = null;
@@ -2220,9 +2306,10 @@ function kidsGirl(mode) {
   // The curved path: from above the screen, drifting side to side, down to her spot on the lawn
   function build() {
     path?.kill();
-    const sec = $(".kids-section");
-    const feet = tv.getBoundingClientRect().top - sec.getBoundingClientRect().top + el.offsetTop; // from the scene's top
-    const top = -(feet + H() * 1.3), w = Math.min(innerWidth, 900);
+    // Her feet's height in the scene from layout (the TV's bounce-in is a transform, so it can't skew this), then a
+    // start fully above the screen; the curve is scaled to the screen width
+    const feet = box(tv).y + el.offsetTop;
+    const top = -(feet + H() * 1.4), w = Math.min(innerWidth, 900);
     gsap.set(el, { x: -w * .14, y: top });
     path = gsap.to(el, {
       motionPath: { path: [{ x: w * .1, y: top * .64 }, { x: -w * .06, y: top * .3 }, { x: w * .02, y: -H() * .3 }, { x: 0, y: 0 }], curviness: 1.3 },
@@ -2253,39 +2340,32 @@ function kidsGirl(mode) {
   // After landing, while the content scrolls: binoculars (looking around), a short walk, a wave. On a two-column
   // stage she first hops down into the empty space to the right of the "Most watched" card (under the picks), once
   // it has scrolled into view; on one column (phones) she stays on the lawn on top of the TV.
-  // (layout positions inside the section, so the TV's own bounce-in offset can't skew them)
-  const sec = $(".kids-section");
-  const box = (e) => { let x = 0, y = 0; for (let n = e; n && n !== sec; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; } return { x, y, w: e.offsetWidth, h: e.offsetHeight }; };
   const spot = cached(() => {
     const cap = $(".tv-caption"), picks = $("#kids-picks");
     if (!cap || !picks) return null;
     const t = box(tv), c = box(cap), k = box(picks);
     if (k.x < t.x + t.w - 10) return null;   // one column: no space beside the card
-    return { x: k.x + k.w * .2 - t.x - el.offsetLeft, y: c.y + c.h - 6 - t.y - el.offsetTop, w: k.w, secY: c.y + c.h };
+    return { x: k.x + k.w * .2 - t.x - el.offsetLeft, y: c.y + c.h - 6 - t.y - el.offsetTop, w: k.w };
   });
   function drawAfter(p) {
     g = p;
+    // The same moments at the same scroll on every screen: binoculars, then the walk, then the wave. On a two-column
+    // stage the walk takes her (with a hop down) to her spot beside the "Most watched" card; on one column she walks
+    // along the lawn on top of the TV.
     const sp = spot();
-    const hop = sp ? ramp(p, 0, .18, "sine.inOut") : 0;
-    const t0 = sp ? .18 : 0;
-    const look = ramp(p, t0 + .02, .45), walk = ramp(p, .45, .75, "sine.inOut"), bye = ramp(p, .75, 1);
+    const look = ramp(p, .12, .45), walk = ramp(p, .45, .75, "sine.inOut"), bye = ramp(p, .75, 1);
     const step = walk > 0 && walk < 1 ? Math.abs(Math.sin(walk * Math.PI * 7)) : 0;
-    const dist = sp ? sp.w * .32 : tvW() * .38;
+    const hop = sp ? Math.sin(Math.PI * ramp(walk, .55, 1)) * H() * .8 : 0;
     gsap.set(act, {
-      x: (sp ? sp.x * hop : 0) + dist * walk,
-      y: (sp ? sp.y * hop - Math.sin(Math.PI * hop) * H() * .8 : 0) - step * H() * .035,
+      x: sp ? (sp.x + sp.w * .32) * walk : tvW() * .38 * walk,
+      y: (sp ? sp.y * walk - hop : 0) - step * H() * .035,
     });
     gsap.set(breathEl, { rotation: p < .45 ? Math.sin(look * Math.PI * 2) * 4 : p < .75 ? 2 + step * 2 : Math.sin(bye * Math.PI * 6) * 5 });
     pose();
   }
 
   scrubbed({ start: () => stack.top("kids"), end: () => stack.inner("kids").start() }, drawFall);
-  // The after-landing moments start once her spot is on screen (at once on one column)
-  const afterStart = () => {
-    const sp = spot(), s0 = stack.inner("kids").start();
-    return sp ? s0 + Math.max(0, Math.min(stack.contentTravel("kids"), sp.secY - innerHeight * .82)) : s0;
-  };
-  scrubbed({ start: afterStart, end: () => afterStart() + innerHeight * .7 }, drawAfter);
+  scrubbed({ start: () => stack.inner("kids").start(), end: () => stack.inner("kids").start() + innerHeight * 1.1 }, drawAfter);
   const rebuild = () => { path = null; drawFall(f); };
   ScrollTrigger.addEventListener("refresh", rebuild);
   return () => { ScrollTrigger.removeEventListener("refresh", rebuild); path?.kill(); girl.destroy(); };
@@ -2587,24 +2667,6 @@ function contactGirl(mode) {
   return () => girl.destroy();
 }
 
-// ---- Time: a small clock in the corner; the minute hand ticks one lap per section ----
-function timeDial() {
-  const dial = document.createElement("div");
-  dial.className = "time-dial";
-  dial.setAttribute("aria-hidden", "true");
-  dial.innerHTML = '<i class="td-h"></i><i class="td-m"></i>';
-  document.body.append(dial);
-  const laps = $$("[data-section]").length;
-  const mTo = gsap.quickTo($(".td-m", dial), "rotation", { duration: .35, ease: "back.out(3)" });
-  const hTo = gsap.quickTo($(".td-h", dial), "rotation", { duration: .8, ease: "power2.out" });
-  const st = ScrollTrigger.create({
-    ...(stack ? { start: () => stack.top("home") - stack.R() * .5, end: "max" } : { trigger: "#main", start: "top 40%", end: "bottom bottom" }),
-    onUpdate: (self) => { mTo(Math.round(self.progress * laps * 12) * 30); hTo(self.progress * 360); },
-    onToggle: (self) => gsap.to(dial, { opacity: self.isActive ? .9 : 0, duration: .4 }),
-  });
-  return () => { st.kill(); dial.remove(); };
-}
-
 // ---- 03 (mobile) Music: slow cinematic fades instead of the fly-over ----
 function musicFlat() {
   const cards = $$(".mcard");
@@ -2688,24 +2750,28 @@ function pointerDetails() {
     const rx = gsap.quickTo(el, "rotationX", { duration: kids ? .9 : .5, ease });
     const ry = gsap.quickTo(el, "rotationY", { duration: kids ? .9 : .5, ease });
     gsap.set(el, { transformPerspective: 800 });
+    let r = null;   // measured once per hover, not on every move
+    on(el, "mouseenter", () => { r = el.getBoundingClientRect(); });
     on(el, "mousemove", (e) => {
-      const r = el.getBoundingClientRect();
+      r ??= el.getBoundingClientRect();
       ry(((e.clientX - r.left) / r.width - .5) * max * 2);
       rx((.5 - (e.clientY - r.top) / r.height) * max * 2);
     });
-    on(el, "mouseleave", () => { rx(0); ry(0); });
+    on(el, "mouseleave", () => { r = null; rx(0); ry(0); });
   });
 
   $$("[data-magnetic], .filter").forEach((el) => {
     const xTo = gsap.quickTo(el, "x", { duration: .6, ease: "elastic.out(1, .4)" });
     const yTo = gsap.quickTo(el, "y", { duration: .6, ease: "elastic.out(1, .4)" });
     const clamp = gsap.utils.clamp(-12, 12);
+    let r = null;
+    on(el, "mouseenter", () => { r = el.getBoundingClientRect(); });
     on(el, "mousemove", (e) => {
-      const r = el.getBoundingClientRect();
+      r ??= el.getBoundingClientRect();
       xTo(clamp((e.clientX - r.left - r.width / 2) * .3));
       yTo(clamp((e.clientY - r.top - r.height / 2) * .3));
     });
-    on(el, "mouseleave", () => { xTo(0); yTo(0); });
+    on(el, "mouseleave", () => { r = null; xTo(0); yTo(0); });
   });
   return () => off.forEach((fn) => fn());
 }
@@ -2776,7 +2842,6 @@ if (window.gsap && window.ScrollTrigger && !proxyBrowser) {
     cleanups.push(kidsMotion(desk));
     cleanups.push(kidsJungle(desk));
     cleanups.push(homeGirl("motion"), musicGirl("motion"), kidsGirl("motion"), processGirl("motion"), statsGirl("motion"), contactGirl("motion"));
-    cleanups.push(timeDial());
     lowerMotion(desk);
     counters();
     addEventListener("load", () => ScrollTrigger.refresh(), { once: true });

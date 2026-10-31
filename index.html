@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Virendra Bhakuni — AI Creative Studio</title>
-  <meta name="description" content="Virendra Bhakuni, AI Creative Studio: AI music videos, travel stories and kids cartoons.">
+  <title>VB Motion | Where AI meets emotion</title>
+  <meta name="description" content="VB Motion by Virendra Bhakuni: AI music videos, travel stories and kids cartoons. Where AI meets emotion.">
   <meta name="theme-color" content="#fbf9f4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
 </svg>
 
 <header class="site-header wrap">
-  <a class="brand" href="#top" data-magnetic>VIRENDRA<br>BHAKUNI <small>AI CREATIVE STUDIO</small></a>
+  <a class="brand" href="#top" data-magnetic aria-label="VB Motion, home"><span class="brand-name">VB <em>Motion</em></span> <small>Where AI meets emotion</small></a>
   <nav aria-label="Main"><a href="#work">Work</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
   <a class="pill" href="#contact" data-contact data-magnetic>LET'S CREATE <svg class="ico"><use href="#i-arrow"/></svg></a>
 </header>
@@ -167,10 +167,10 @@
     </div>
     <!-- Leaf frame: vine-and-leaf clusters in the picture's corners (the vine reveal settles into them) -->
     <div class="kids-frame" aria-hidden="true">
-      <img class="lf-corner lf-tl" src="assets/leaves/leaves-top-left.webp" alt="" width="1200" height="909" loading="lazy" decoding="async">
-      <img class="lf-corner lf-tr" src="assets/leaves/leaves-top-right.webp" alt="" width="1192" height="956" loading="lazy" decoding="async">
-      <img class="lf-corner lf-bl" src="assets/leaves/leaves-bottom-left.webp" alt="" width="1200" height="968" loading="lazy" decoding="async">
-      <img class="lf-corner lf-br" src="assets/leaves/leaves-bottom-right.webp" alt="" width="1171" height="922" loading="lazy" decoding="async">
+      <img class="lf-corner lf-tl" src="assets/leaves/leaves-top-left.webp" srcset="assets/leaves/leaves-top-left-600.webp 600w, assets/leaves/leaves-top-left.webp 1200w" sizes="(max-width: 620px) 52vw, 27vw" alt="" width="1200" height="909" loading="lazy" decoding="async">
+      <img class="lf-corner lf-tr" src="assets/leaves/leaves-top-right.webp" srcset="assets/leaves/leaves-top-right-600.webp 600w, assets/leaves/leaves-top-right.webp 1200w" sizes="(max-width: 620px) 52vw, 27vw" alt="" width="1192" height="956" loading="lazy" decoding="async">
+      <img class="lf-corner lf-bl" src="assets/leaves/leaves-bottom-left.webp" srcset="assets/leaves/leaves-bottom-left-600.webp 600w, assets/leaves/leaves-bottom-left.webp 1200w" sizes="(max-width: 620px) 52vw, 27vw" alt="" width="1200" height="968" loading="lazy" decoding="async">
+      <img class="lf-corner lf-br" src="assets/leaves/leaves-bottom-right.webp" srcset="assets/leaves/leaves-bottom-right-600.webp 600w, assets/leaves/leaves-bottom-right.webp 1200w" sizes="(max-width: 620px) 52vw, 27vw" alt="" width="1171" height="922" loading="lazy" decoding="async">
     </div>
   </div>
   <div class="kids-doodles" aria-hidden="true">
@@ -210,15 +210,16 @@
       <div class="kids-picks" id="kids-picks" role="group" aria-label="Choose a cartoon for the TV"></div>
     </div>
 
-    <!-- More cartoons: character tabs + a sideways-scrolling row -->
+    <!-- More cartoons: character tabs + a carousel (whole cards, arrows on its sides, dots under it; app.js) -->
     <div class="kids-more">
       <div class="kids-tabs" id="kids-tabs" role="group" aria-label="Filter cartoons by character"></div>
-      <div class="row-nav">
-        <button class="row-btn" data-dir="-1" aria-label="Scroll cartoons left"><svg class="ico" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
-        <button class="row-btn" data-dir="1" aria-label="Scroll cartoons right"><svg class="ico"><use href="#i-arrow"/></svg></button>
-      </div>
     </div>
-    <div class="kids-row" id="kids-row"></div>
+    <div class="kids-car" role="region" aria-roledescription="carousel" aria-label="More cartoons">
+      <button class="row-btn row-prev" type="button" data-dir="-1" aria-label="Previous cartoons" aria-controls="kids-row"><svg class="ico" style="transform:scaleX(-1)"><use href="#i-arrow"/></svg></button>
+      <div class="kids-row" id="kids-row" tabindex="0" aria-label="Cartoons; use the left and right arrow keys to move"></div>
+      <button class="row-btn row-next" type="button" data-dir="1" aria-label="Next cartoons" aria-controls="kids-row"><svg class="ico"><use href="#i-arrow"/></svg></button>
+      <div class="kids-dots" aria-hidden="true"></div>
+    </div>
   </div>
 </section>
 
