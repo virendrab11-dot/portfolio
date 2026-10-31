@@ -65,9 +65,11 @@ button { font: inherit; color: inherit; }
    Header
    ========================================================= */
 .site-header { height: 76px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: absolute; z-index: 30; top: 0; left: 50%; transform: translateX(-50%); color: var(--ink); }
-/* Logo: "VB Motion" on one line ("Motion" in the About heading's gold, italic for weight at this size), then the tagline */
-.brand { justify-self: start; display: flex; align-items: baseline; gap: 13px; font: 22px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
-.brand-name em { font-style: italic; background: linear-gradient(100deg, #a8782f, #d8aa5c 45%, #9a6c27); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em; }
+/* Logo: the "VB Motion" script mark (assets/brand), then the tagline */
+.brand { justify-self: start; display: flex; align-items: center; gap: 13px; font: 22px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
+.brand-logo { display: block; height: 44px; width: auto; }
+.hero-name img { display: block; width: calc(var(--hn, 28px) * 8); height: auto; margin: 0 auto; }
+.foot-logo { display: block; height: clamp(64px, 8vw, 110px); width: auto; }
 .brand small { font: 500 10px var(--sans); letter-spacing: .16em; color: #30333a; white-space: nowrap; }
 nav { display: flex; justify-content: center; gap: 32px; }
 nav a { position: relative; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; padding: 10px 0; }
@@ -791,6 +793,7 @@ footer :focus-visible { outline-color: var(--gold); }
   :root { --hdr: 64px; }
   .site-header { height: 64px; }
   .brand { font-size: 19px; }
+  .brand-logo { height: 34px; }
   .brand small { display: none; }
   .pill { padding: 10px 14px; }
   .hero-pin { height: 620px; }
