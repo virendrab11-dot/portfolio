@@ -1,0 +1,12 @@
+# Local backups and working files (not used by the site)
+_backup_*/
+_girl_cutout_backup/
+.claude/
+
+# Image originals and large PNG copies: the site uses the .webp versions
+assets/girl/source/
+assets/girl/*.png
+assets/girl/girl-reference.webp
+assets/leaves/*.png
+assets/jungle/old/
+assets/reference/

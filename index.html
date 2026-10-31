@@ -8,8 +8,12 @@
   <meta name="theme-color" content="#fbf9f4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Gelasio:ital,wght@0,400;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Baloo+2:wght@600;800&family=Gelasio:ital,wght@0,400;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://i.ytimg.com">
+  <!-- Intro poses: fetched while "HELLO" drops in (app.js preloads the rest) -->
+  <link rel="preload" as="image" type="image/webp" href="assets/girl/idle.webp">
+  <link rel="preload" as="image" type="image/webp" href="assets/girl/point.webp">
+  <link rel="preload" as="image" type="image/webp" href="assets/girl/pull.webp">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -23,6 +27,10 @@
   <symbol id="i-idea" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5zM3 13l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-bf" viewBox="0 0 40 32"><path d="M20 16C14 2 2 1 3 10c1 6 9 7 17 6zM20 16C26 2 38 1 37 10c-1 6-9 7-17 6z" fill="currentColor" stroke="#7a3d10" stroke-width="1"/><path d="M20 17c-6 1-12 6-9 11 3 3 8-3 9-11zM20 17c6 1 12 6 9 11-3 3-8-3-9-11z" fill="currentColor" opacity=".85" stroke="#7a3d10" stroke-width="1"/><path d="M20 9v16" stroke="#3a2a1a" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 100 40"><path d="M0 20C18 2 58-2 100 20 58 42 18 38 0 20z" fill="currentColor"/><path d="M3 20C36 17 66 18 97 20" fill="none" stroke="#123016" stroke-opacity=".45" stroke-width="1.6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-playbox" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 9.2v5.6l4.6-2.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 5.5v13L18 12z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -31,6 +39,17 @@
   <nav aria-label="Main"><a href="#work">Work</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
   <a class="pill" href="#contact" data-contact data-magnetic>LET'S CREATE <svg class="ico"><use href="#i-arrow"/></svg></a>
 </header>
+
+<!-- 00 INTRO: the girl pulls the stray "L" back into HELLO (app.js; the girl is added there) -->
+<section class="intro" id="intro" aria-label="Intro">
+  <div class="intro-pin">
+    <div class="intro-stage">
+      <p class="intro-word"><span class="sr-only">Hello</span><span class="intro-letters" aria-hidden="true">HELLO</span></p>
+    </div>
+    <p class="intro-hint" hidden aria-hidden="true"><svg class="ico"><use href="#i-down"/></svg> Scroll to help her</p>
+    <button class="intro-skip" type="button" hidden>Skip intro <svg class="ico"><use href="#i-arrow"/></svg></button>
+  </div>
+</section>
 
 <main id="main">
 
@@ -130,14 +149,32 @@
 
 <!-- 04 KIDS CARTOONS -->
 <section class="kids-section" id="kids" data-section="04" aria-labelledby="kids-title">
-  <div class="kids-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <!-- Jungle background: a full screen behind the Kids scene that stays put while the content scrolls over it
+       (the picture covers it, lawn at the bottom), framed by leaves; app.js adds the butterflies' paths -->
+  <div class="kids-bg" aria-hidden="true">
+    <div class="kids-jungle" aria-hidden="true">
+      <div class="jg-pic">
+        <picture>
+          <source media="(max-aspect-ratio: 1/1)" srcset="assets/jungle/jungle-bg-mobile.webp">
+          <source media="(max-width: 1279px)" srcset="assets/jungle/jungle-bg-1200.webp">
+          <img src="assets/jungle/jungle-bg.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+        </picture>
+        <span class="jg-water"></span>
+        <span class="jg-bf" style="color: #ffb23e"><svg viewBox="0 0 40 32"><use href="#i-bf"/></svg></span>
+        <span class="jg-bf" style="color: #ff7f6e"><svg viewBox="0 0 40 32"><use href="#i-bf"/></svg></span>
+        <span class="jg-bf" style="color: #8fd3ff"><svg viewBox="0 0 40 32"><use href="#i-bf"/></svg></span>
+      </div>
+    </div>
+    <!-- Leaf frame: vine-and-leaf clusters in the picture's corners (the vine reveal settles into them) -->
+    <div class="kids-frame" aria-hidden="true">
+      <img class="lf-corner lf-tl" src="assets/leaves/leaves-top-left.webp" alt="" width="1200" height="909" loading="lazy" decoding="async">
+      <img class="lf-corner lf-tr" src="assets/leaves/leaves-top-right.webp" alt="" width="1192" height="956" loading="lazy" decoding="async">
+      <img class="lf-corner lf-bl" src="assets/leaves/leaves-bottom-left.webp" alt="" width="1200" height="968" loading="lazy" decoding="async">
+      <img class="lf-corner lf-br" src="assets/leaves/leaves-bottom-right.webp" alt="" width="1171" height="922" loading="lazy" decoding="async">
+    </div>
+  </div>
   <div class="kids-doodles" aria-hidden="true">
-    <svg class="dd dd-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>
-    <svg class="dd dd-cloud" viewBox="0 0 48 28"><path d="M13 27a10 10 0 0 1-1.6-19.9A12 12 0 0 1 34 6.5 9 9 0 1 1 37 27z"/></svg>
     <svg class="dd dd-note" viewBox="0 0 24 24"><path d="M9 18.5V5l11-2v12.5" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18.5" r="3"/><circle cx="17.5" cy="15.5" r="3"/></svg>
-    <svg class="dd dd-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4 7 4c2.2 0 3.6 1.3 5 3 1.4-1.7 2.8-3 5-3 4 0 6.1 4.2 4.6 7.7C19.5 16.4 12 21 12 21z"/></svg>
-    <svg class="dd dd-star2" viewBox="0 0 24 24"><path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>
-    <svg class="dd dd-cloud2" viewBox="0 0 48 28"><path d="M13 27a10 10 0 0 1-1.6-19.9A12 12 0 0 1 34 6.5 9 9 0 1 1 37 27z"/></svg>
   </div>
   <div class="wrap">
     <div class="kids-head">
@@ -185,16 +222,29 @@
   </div>
 </section>
 
-<!-- 05 ABOUT -->
+<!-- 05 ABOUT: brush-stroke portrait on the left (three copies of one artwork: strokes, frame and signature, so each
+     can animate), copy and stats on the right, a handwritten watermark and misty mountains behind (app.js animates) -->
 <section class="about-section" id="about" data-section="05" aria-labelledby="about-title">
+  <p class="ab-watermark" aria-hidden="true">About</p>
+  <svg class="ab-mist" viewBox="0 0 800 260" preserveAspectRatio="none" aria-hidden="true">
+    <defs><linearGradient id="ab-mist-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9a37a" stop-opacity=".22"/><stop offset="1" stop-color="#fbf7f1" stop-opacity="0"/></linearGradient></defs>
+    <path d="M0 260V170l90-46 70 30 110-88 90 64 70-36 120 92 80-40 170 64v50z" fill="url(#ab-mist-g)"/>
+    <path d="M0 260v-52l130-34 90 22 140-70 110 58 90-26 240 70v32z" fill="url(#ab-mist-g)" opacity=".8"/>
+  </svg>
+  <div class="ab-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="wrap about-grid">
-    <div class="about-photo"><img src="assets/about.jpg" alt="Portrait of Virendra Bhakuni" width="800" height="800" loading="lazy"></div>
+    <figure class="ab-art">
+      <span class="ab-paint"><img class="ab-layer ab-strokes" src="assets/about/about-art.webp" alt="" width="926" height="781" loading="lazy" decoding="async"></span>
+      <img class="ab-layer ab-frame" src="assets/about/about-art.webp" alt="Illustrated portrait of Virendra Bhakuni, smiling, in a blue blazer" width="926" height="781" loading="lazy" decoding="async">
+      <img class="ab-layer ab-sign" src="assets/about/about-art.webp" alt="" width="926" height="781" loading="lazy" decoding="async">
+    </figure>
     <div class="about-copy">
-      <div class="section-title">05 / ABOUT</div>
-      <h2 id="about-title" data-words>Hi, I'm<br>Virendra Bhakuni.</h2>
+      <div class="section-title ab-label"><span class="ab-dash" aria-hidden="true"></span>05 / ABOUT</div>
+      <h2 id="about-title" data-words>Hi, I'm<br><span class="ab-gold">Virendra</span> Bhakuni.</h2>
       <p>AI Creator / Content Producer / Storyteller. Creating music, animated worlds and visual stories with AI — blending creativity, technology and emotion.</p>
+      <hr class="ab-rule">
       <dl class="about-stats" id="about-stats"></dl>
-      <a class="pill" href="#contact" data-contact data-magnetic>LET'S CONNECT <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a class="pill ab-btn" href="#contact" data-contact data-magnetic>LET'S CONNECT <svg class="ico"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
@@ -238,6 +288,9 @@
     <span id="updated"></span>
   </div>
 </footer>
+
+<!-- Time warp between the intro and the hero (app.js) -->
+<div class="warp" aria-hidden="true"><div class="warp-flash"></div><div class="warp-streaks"></div><div class="warp-clock"><i></i></div></div>
 
 <!-- Video popup -->
 <dialog class="player" id="player" aria-label="Video player">
@@ -303,8 +356,14 @@
 
 <!-- Timestamp stops the browser from reusing an old cached copy after you re-run fetch_videos.py -->
 <script>document.write('<script src="data/videos.js?t=' + Date.now() + '"><\/script>');</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/MotionPathPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/CustomEase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/CustomBounce.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/CustomWiggle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/InertiaPlugin.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="app.js"></script>
 </body>
