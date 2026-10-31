@@ -68,10 +68,12 @@ button { font: inherit; color: inherit; }
 /* Logo: the "VB Motion" script mark (assets/brand), then the tagline */
 .brand { justify-self: start; display: flex; align-items: center; gap: 13px; font: 22px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
 /* Both sizes set explicitly (iOS Safari can fall back to the file's own height with height: auto), contain as a safety net */
-.brand-logo { display: block; height: 52px; width: calc(52px * 1962 / 641); object-fit: contain; }
+.brand-badge { display: block; height: 52px; width: calc(52px * 470 / 350); object-fit: cover; border-radius: 12px; box-shadow: 0 6px 14px -6px rgba(23, 33, 20, .45); }
+.brand-text { display: grid; gap: 5px; }
+.brand-name { font: 500 20px/1 var(--serif); letter-spacing: .16em; color: #2f4a32; }
 .hero-name img { display: block; width: calc(var(--hn, 28px) * 9); height: calc(var(--hn, 28px) * 9 * 641 / 1962); object-fit: contain; margin: 0 auto; }
-.foot-logo { display: block; height: clamp(56px, 6vw, 90px); width: calc(clamp(56px, 6vw, 90px) * 1962 / 641); object-fit: contain; }
-.brand small { font: 500 10px var(--sans); letter-spacing: .16em; color: #30333a; white-space: nowrap; }
+.foot-logo { display: block; height: clamp(120px, 12vw, 170px); width: calc(clamp(120px, 12vw, 170px) * 470 / 444); object-fit: cover; border-radius: 14px; }
+.brand small { font: 500 10px var(--sans); letter-spacing: .12em; color: var(--gold-text); white-space: nowrap; }
 nav { display: flex; justify-content: center; gap: 32px; }
 nav a { position: relative; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; padding: 10px 0; }
 nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
@@ -794,7 +796,8 @@ footer :focus-visible { outline-color: var(--gold); }
   :root { --hdr: 64px; }
   .site-header { height: 64px; }
   .brand { font-size: 19px; }
-  .brand-logo { height: 40px; width: calc(40px * 1962 / 641); }
+  .brand-badge { height: 40px; width: calc(40px * 470 / 350); border-radius: 10px; }
+  .brand-name { font-size: 16px; letter-spacing: .12em; }
   .brand small { display: none; }
   .pill { padding: 10px 14px; }
   .hero-pin { height: 620px; }
