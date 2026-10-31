@@ -72,15 +72,18 @@ button { font: inherit; color: inherit; }
 .vbm { --ls: 19px; display: inline-flex; align-items: center; gap: calc(var(--ls) * .62); white-space: nowrap; text-align: left; }
 .vbm-badge { display: block; flex: none; height: calc(var(--ls) * 2.35); width: calc(var(--ls) * 2.35 * 470 / 350); object-fit: cover;
   border-radius: calc(var(--ls) * .6); box-shadow: 0 6px 14px -6px rgba(23, 33, 20, .45), 0 0 0 1px rgba(212, 178, 117, .35); }
+.brand-logo { display: block; height: 52px; width: calc(52px * 1400 / 419); object-fit: contain; }
+.vbm-round { display: block; flex: none; height: calc(var(--ls) * 3); width: calc(var(--ls) * 3 * 600 / 318); object-fit: contain; }
 .vbm-text { display: grid; gap: calc(var(--ls) * .34); justify-items: start; }
 .vbm-name { font: 500 var(--ls)/1 var(--serif); letter-spacing: .2em; color: #2f4a32; font-style: normal; }
 .vbm-tag { display: flex; align-items: center; gap: .55em; font: italic 400 max(9px, calc(var(--ls) * .54))/1 var(--serif); letter-spacing: .05em; color: #2f4a32; }
 .vbm-tag::before { content: ""; width: 1.7em; height: 1px; background: linear-gradient(90deg, transparent, #c99545); }
 .vbm-tag b { font-weight: 600; font-style: normal; color: #a8782f; }
-.hero-name .vbm { --ls: calc(var(--hn, 28px) * .92); letter-spacing: 0; text-shadow: none; }
-.hero-name .vbm span { font-style: normal; }
-.hero-name .vbm .vbm-tag { font-style: italic; }
-.foot-logo { display: block; height: clamp(120px, 12vw, 170px); width: calc(clamp(120px, 12vw, 170px) * 470 / 444); object-fit: cover; border-radius: 14px; }
+/* Home ring centre: the dark circle logo on a deep green disc with a thin gold ring */
+.hero-seal { --sd: calc(var(--hn, 28px) * 5.4); display: grid; place-items: center; width: var(--sd); height: var(--sd); margin: 0 auto; border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, #3a5a3c, #22351f 62%, #172414); box-shadow: 0 0 0 2px rgba(212, 178, 117, .55), 0 0 0 6px rgba(212, 178, 117, .12), 0 18px 40px -16px rgba(23, 36, 20, .7); }
+.hero-seal img { display: block; width: 80%; height: calc(var(--sd) * .8 * 421 / 461); object-fit: contain; }
+.foot-logo { display: block; height: clamp(120px, 12vw, 170px); width: calc(clamp(120px, 12vw, 170px) * 461 / 421); object-fit: contain; }
 nav { display: flex; justify-content: center; gap: 32px; }
 nav a { position: relative; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; padding: 10px 0; }
 nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
@@ -803,8 +806,7 @@ footer :focus-visible { outline-color: var(--gold); }
   :root { --hdr: 64px; }
   .site-header { height: 64px; }
   .brand { font-size: 19px; }
-  .brand .vbm { --ls: 13px; }
-  .brand .vbm-tag { font-size: 8.5px; letter-spacing: .02em; }
+  .brand-logo { height: 42px; width: calc(42px * 1400 / 419); }
   .brand { margin-left: 4px; }
   /* Header pill tall enough for the badge and the button (the header is only 64px here) */
   .is-stack .site-header::before { inset: 6px calc(var(--gutter) * -.5); }
