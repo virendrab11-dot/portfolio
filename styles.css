@@ -68,9 +68,9 @@ button { font: inherit; color: inherit; }
 /* Logo: the "VB Motion" script mark (assets/brand), then the tagline */
 .brand { justify-self: start; display: flex; align-items: center; gap: 13px; font: 22px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
 /* Both sizes set explicitly (iOS Safari can fall back to the file's own height with height: auto), contain as a safety net */
-.brand-logo { display: block; height: 44px; width: calc(44px * 1736 / 621); object-fit: contain; }
-.hero-name img { display: block; width: calc(var(--hn, 28px) * 8); height: calc(var(--hn, 28px) * 8 * 621 / 1736); object-fit: contain; margin: 0 auto; }
-.foot-logo { display: block; height: clamp(64px, 8vw, 110px); width: calc(clamp(64px, 8vw, 110px) * 1736 / 807); object-fit: contain; }
+.brand-logo { display: block; height: 52px; width: calc(52px * 1962 / 641); object-fit: contain; }
+.hero-name img { display: block; width: calc(var(--hn, 28px) * 9); height: calc(var(--hn, 28px) * 9 * 641 / 1962); object-fit: contain; margin: 0 auto; }
+.foot-logo { display: block; height: clamp(56px, 6vw, 90px); width: calc(clamp(56px, 6vw, 90px) * 1962 / 641); object-fit: contain; }
 .brand small { font: 500 10px var(--sans); letter-spacing: .16em; color: #30333a; white-space: nowrap; }
 nav { display: flex; justify-content: center; gap: 32px; }
 nav a { position: relative; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; padding: 10px 0; }
@@ -794,7 +794,7 @@ footer :focus-visible { outline-color: var(--gold); }
   :root { --hdr: 64px; }
   .site-header { height: 64px; }
   .brand { font-size: 19px; }
-  .brand-logo { height: 34px; width: calc(34px * 1736 / 621); }
+  .brand-logo { height: 40px; width: calc(40px * 1962 / 641); }
   .brand small { display: none; }
   .pill { padding: 10px 14px; }
   .hero-pin { height: 620px; }
