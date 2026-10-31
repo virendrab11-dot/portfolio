@@ -68,12 +68,19 @@ button { font: inherit; color: inherit; }
 /* Logo: the "VB Motion" script mark (assets/brand), then the tagline */
 .brand { justify-self: start; display: flex; align-items: center; gap: 13px; font: 22px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
 /* Both sizes set explicitly (iOS Safari can fall back to the file's own height with height: auto), contain as a safety net */
-.brand-badge { display: block; height: 44px; width: calc(44px * 470 / 350); object-fit: cover; border-radius: 12px; box-shadow: 0 6px 14px -6px rgba(23, 33, 20, .45); }
-.brand-text { display: grid; gap: 5px; }
-.brand-name { font: 500 20px/1 var(--serif); letter-spacing: .16em; color: #2f4a32; }
-.hero-name img { display: block; width: calc(var(--hn, 28px) * 9); height: calc(var(--hn, 28px) * 9 * 641 / 1962); object-fit: contain; margin: 0 auto; }
+/* VB Motion lockup (header and home ring): badge, name, tagline; everything scales from --ls (the name's size) */
+.vbm { --ls: 19px; display: inline-flex; align-items: center; gap: calc(var(--ls) * .62); white-space: nowrap; text-align: left; }
+.vbm-badge { display: block; flex: none; height: calc(var(--ls) * 2.35); width: calc(var(--ls) * 2.35 * 470 / 350); object-fit: cover;
+  border-radius: calc(var(--ls) * .6); box-shadow: 0 6px 14px -6px rgba(23, 33, 20, .45), 0 0 0 1px rgba(212, 178, 117, .35); }
+.vbm-text { display: grid; gap: calc(var(--ls) * .34); justify-items: start; }
+.vbm-name { font: 500 var(--ls)/1 var(--serif); letter-spacing: .2em; color: #2f4a32; font-style: normal; }
+.vbm-tag { display: flex; align-items: center; gap: .55em; font: italic 400 max(9px, calc(var(--ls) * .54))/1 var(--serif); letter-spacing: .05em; color: #2f4a32; }
+.vbm-tag::before { content: ""; width: 1.7em; height: 1px; background: linear-gradient(90deg, transparent, #c99545); }
+.vbm-tag b { font-weight: 600; font-style: normal; color: #a8782f; }
+.hero-name .vbm { --ls: calc(var(--hn, 28px) * .92); letter-spacing: 0; text-shadow: none; }
+.hero-name .vbm span { font-style: normal; }
+.hero-name .vbm .vbm-tag { font-style: italic; }
 .foot-logo { display: block; height: clamp(120px, 12vw, 170px); width: calc(clamp(120px, 12vw, 170px) * 470 / 444); object-fit: cover; border-radius: 14px; }
-.brand small { font: 500 10px var(--sans); letter-spacing: .12em; color: var(--gold-text); white-space: nowrap; }
 nav { display: flex; justify-content: center; gap: 32px; }
 nav a { position: relative; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; padding: 10px 0; }
 nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
@@ -796,13 +803,12 @@ footer :focus-visible { outline-color: var(--gold); }
   :root { --hdr: 64px; }
   .site-header { height: 64px; }
   .brand { font-size: 19px; }
-  .brand-badge { height: 34px; width: calc(34px * 470 / 350); border-radius: 9px; }
+  .brand .vbm { --ls: 13px; }
+  .brand .vbm-tag { font-size: 8.5px; letter-spacing: .02em; }
   .brand { margin-left: 4px; }
   /* Header pill tall enough for the badge and the button (the header is only 64px here) */
   .is-stack .site-header::before { inset: 6px calc(var(--gutter) * -.5); }
-  .site-header > .pill { min-height: 38px; padding: 7px 14px; }
-  .brand-name { font-size: 16px; letter-spacing: .12em; }
-  .brand small { display: none; }
+  .site-header > .pill { min-height: 38px; padding: 7px 12px; letter-spacing: .1em; }
   .pill { padding: 10px 14px; }
   .hero-pin { height: 620px; }
   .hero-bg img { object-position: 62% center; }
